@@ -4,6 +4,7 @@
 
 import * as dom from './utils/dom';
 import * as dialog from './utils/dialog';
+import { getAccessibleName } from './utils/accname';
 
 (function () {
   var targetList = [
@@ -17,11 +18,22 @@ import * as dialog from './utils/dialog';
   var msgText   = "No list elements (" + selectors + ") found.";
   var className = dom.listsCss;
 
+  function getInfo (element, target) {
+    var accessibleName = getAccessibleName(element, target);
+    return 'ACC. NAME: ' + accessibleName;
+  }
+  let params = {
+    targetList: targetList,
+    className: className,
+    getInfo: getInfo,
+    dndFlag: true
+  };
+
   window.accessibility = function (flag){
     dialog.hide();
     window.a11yShowLists = (typeof flag === "undefined") ? true : !flag;
     if (window.a11yShowLists){
-      if (dom.addNodes(targetList, className, true) === 0) {
+      if (dom.addNodes(params) === 0) {
         dialog.show(msgTitle, msgText);
         window.a11yShowLists = false;
       }

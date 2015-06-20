@@ -60,6 +60,8 @@
 
 	var dialog = _interopRequireWildcard(_utilsDialog);
 
+	var _utilsAccname = __webpack_require__(5);
+
 	(function () {
 	  var targetList = [{ selector: 'h1', color: 'navy', label: 'h1' }, { selector: 'h2', color: 'olive', label: 'h2' }, { selector: 'h3', color: 'purple', label: 'h3' }, { selector: 'h4', color: 'green', label: 'h4' }, { selector: 'h5', color: 'gray', label: 'h5' }, { selector: 'h6', color: 'brown', label: 'h6' }];
 
@@ -70,11 +72,23 @@
 	  var msgText = 'No heading elements (' + selectors + ') found.';
 	  var className = dom.headingsCss;
 
+	  function getInfo(element, target) {
+	    var textContent = (0, _utilsAccname.getElementText)(element);
+	    return target.label + ': ' + textContent;
+	  }
+
+	  var params = {
+	    targetList: targetList,
+	    className: className,
+	    getInfo: getInfo,
+	    dndFlag: true
+	  };
+
 	  window.accessibility = function (flag) {
 	    dialog.hide();
 	    window.a11yShowHeadings = typeof flag === 'undefined' ? true : !flag;
 	    if (window.a11yShowHeadings) {
-	      if (dom.addNodes(targetList, className, true) === 0) {
+	      if (dom.addNodes(params) === 0) {
 	        dialog.show(msgTitle, msgText);
 	        window.a11yShowHeadings = false;
 	      }
@@ -149,9 +163,16 @@
 	/*
 	*   addNodes: Use targetList to generate nodeList of elements and to
 	*   each of these, add an overlay with a unique CSS class name.
+	*   Optionally, if getInfo is specified, add tooltip information;
+	*   if dndFlag is set, add drag-and-drop functionality.
 	*/
 
-	function addNodes(targetList, className, dndFlag) {
+	function addNodes(params) {
+	  var targetList = params.targetList;
+	  var className = params.className;
+	  var getInfo = params.getInfo;
+	  var dndFlag = params.dndFlag;
+
 	  var counter = 0;
 
 	  targetList.forEach(function (target) {
@@ -163,7 +184,7 @@
 	        boundingRect = element.getBoundingClientRect();
 	        overlayNode = (0, _overlay.createOverlay)(target, boundingRect, className);
 	        if (dndFlag) (0, _overlay.addDragAndDrop)(overlayNode);
-	        // overlayNode.title = getTitleText(element, target);
+	        if (getInfo) overlayNode.title = getInfo(element, target);
 	        document.body.appendChild(overlayNode);
 	        counter += 1;
 	      }
@@ -389,11 +410,7 @@
 	exports.hide = hide;
 	exports.resize = resize;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 	var _utils = __webpack_require__(3);
-
-	var _utils2 = _interopRequireDefault(_utils);
 
 	/*
 	*   setBoxGeometry: Set the width and position of message dialog based on
@@ -403,7 +420,7 @@
 	function setBoxGeometry(dialog) {
 	  var width = window.innerWidth / 3.2;
 	  var left = window.innerWidth / 2 - width / 2;
-	  var scroll = (0, _utils2["default"])();
+	  var scroll = (0, _utils.getScrollOffsets)();
 
 	  dialog.style.width = width + "px";
 	  dialog.style.left = scroll.x + left + "px";
@@ -471,6 +488,158 @@
 
 	function resize() {
 	  if (window.a11yMessageDialog) setBoxGeometry(window.a11yMessageDialog);
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	/*
+	*   accname.js: Functions for retrieving accessible name content
+	*/
+
+	/*
+	*   normalize: Trim leading and trailing whitespace and condense all
+	*   interal sequences of whitespace to a single space. Adapted from
+	*   Mozilla documentation on String.prototype.trim polyfill. Handles
+	*   BOM and NBSP characters.
+	*/
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.getAttributeValue = getAttributeValue;
+	exports.getAccessibleNameAria = getAccessibleNameAria;
+	exports.getAccessibleName = getAccessibleName;
+	exports.getElementText = getElementText;
+	function normalize(s) {
+	  var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+	  return s.replace(rtrim, '').replace(/\s+/g, ' ');
+	}
+
+	/*
+	*   getRefElementAccessibleName: Get text content from element and
+	*   if that is empty, get its title attribute value, and if that is
+	*   null or empty return an empty string.
+	*/
+	function getRefElementAccessibleName(element) {
+	  var textContent;
+
+	  if (element === null) return '';
+
+	  textContent = getElementText(element);
+	  if (textContent) return textContent;
+
+	  if (element.title) return normalize(element.title);
+	  return '';
+	}
+
+	/*
+	*   getAttributeIdRefsValue: Get the IDREFS value of specified attribute
+	*   and return the concatenated string based on referencing each of the
+	*   IDREF values. See getRefElementAccessibleName
+	*/
+	function getAttributeIdRefsValue(element, attribute) {
+	  var value = element.getAttribute(attribute);
+	  var idRefs,
+	      i,
+	      refElement,
+	      accName,
+	      text = [];
+
+	  if (value && value.length) {
+	    idRefs = value.split(' ');
+
+	    for (i = 0; i < idRefs.length; i++) {
+	      refElement = document.getElementById(idRefs[i]);
+	      accName = getRefElementAccessibleName(refElement);
+	      if (accName.length) text.push(accName);
+	    }
+	  }
+
+	  if (text.length) return text.join(' ');
+	  return '';
+	}
+
+	/*
+	*   getAttributeValue: Return attribute value if present on element,
+	*   otherwise return empty string.
+	*/
+
+	function getAttributeValue(element, attribute) {
+	  var value = element.getAttribute(attribute);
+	  return value === null ? '' : normalize(value);
+	}
+
+	/*
+	*   getAccessibleNameAria: The attributes that take precedence over all
+	*   other associations in determining an accessible name for an element
+	*/
+
+	function getAccessibleNameAria(element) {
+	  var name;
+
+	  name = getAttributeIdRefsValue(element, 'aria-labelledby');
+	  if (name.length) return name;
+
+	  name = getAttributeValue(element, 'aria-label');
+	  if (name.length) return name;
+
+	  return '';
+	}
+
+	function getAccessibleName(element, target) {
+	  var name;
+
+	  name = getAccessibleNameAria(element);
+	  if (name.length) return name;
+
+	  name = getAttributeValue(element, 'title');
+	  if (name.length) return name;
+
+	  return target.label;
+	}
+
+	/*
+	*   getElementText: Recursively concatenate the text nodes of element and
+	*   alt text of 'img' and 'area' children of element and its descendants.
+	*/
+
+	function getElementText(element) {
+	  var arrayOfStrings;
+
+	  function getTextRec(node, arr) {
+	    var tagName, altText, content;
+
+	    switch (node.nodeType) {
+	      case Node.ELEMENT_NODE:
+	        tagName = node.tagName.toLowerCase();
+	        if (tagName === 'img' || tagName === 'area') {
+	          altText = getAttributeValue(node, 'alt');
+	          if (altText.length) arr.push(altText);
+	        } else {
+	          if (node.hasChildNodes()) {
+	            Array.prototype.forEach.call(node.childNodes, function (n) {
+	              getTextRec(n, arr);
+	            });
+	          }
+	        }
+	        break;
+	      case Node.TEXT_NODE:
+	        content = normalize(node.textContent);
+	        if (content.length) arr.push(content);
+	        break;
+	      default:
+	        break;
+	    }
+
+	    return arr;
+	  }
+
+	  arrayOfStrings = getTextRec(element, []);
+	  if (arrayOfStrings.length) return arrayOfStrings.join(' ');
+	  return '';
 	}
 
 /***/ }

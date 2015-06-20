@@ -2,7 +2,7 @@
 *   dialog.js: functions for creating, modifying and deleting message dialog
 */
 
-import getScrollOffsets from './utils';
+import { getScrollOffsets } from './utils';
 
 /*
 *   setBoxGeometry: Set the width and position of message dialog based on

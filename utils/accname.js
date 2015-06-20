@@ -14,15 +14,6 @@ function normalize (s) {
 }
 
 /*
-*   getAttributeValue: Return attribute value if present on element,
-*   otherwise return empty string.
-*/
-function getAttributeValue (element, attribute) {
-  var value = element.getAttribute(attribute);
-  return (value === null) ? '' : normalize(value);
-}
-
-/*
 *   getRefElementAccessibleName: Get text content from element and
 *   if that is empty, get its title attribute value, and if that is
 *   null or empty return an empty string.
@@ -63,6 +54,15 @@ function getAttributeIdRefsValue (element, attribute) {
 }
 
 /*
+*   getAttributeValue: Return attribute value if present on element,
+*   otherwise return empty string.
+*/
+export function getAttributeValue (element, attribute) {
+  var value = element.getAttribute(attribute);
+  return (value === null) ? '' : normalize(value);
+}
+
+/*
 *   getAccessibleNameAria: The attributes that take precedence over all
 *   other associations in determining an accessible name for an element
 */
@@ -76,6 +76,18 @@ export function getAccessibleNameAria (element) {
   if (name.length) return name;
 
   return '';
+}
+
+export function getAccessibleName (element, target) {
+  var name;
+
+  name = getAccessibleNameAria(element);
+  if (name.length) return name;
+
+  name = getAttributeValue(element, "title");
+  if (name.length) return name;
+
+  return target.label;
 }
 
 /*

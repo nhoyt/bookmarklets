@@ -34,9 +34,17 @@ function isVisible(element) {
 /*
 *   addNodes: Use targetList to generate nodeList of elements and to
 *   each of these, add an overlay with a unique CSS class name.
+*   Optionally, if getInfo is specified, add tooltip information;
+*   if dndFlag is set, add drag-and-drop functionality.
 */
-export function addNodes(targetList, className, dndFlag) {
-  var counter = 0;
+export function addNodes(params) {
+  let {
+    targetList: targetList,
+    className: className,
+    getInfo: getInfo,
+    dndFlag: dndFlag } = params;
+
+  let counter = 0;
 
   targetList.forEach(function (target) {
     var elements = document.querySelectorAll(target.selector);
@@ -47,7 +55,7 @@ export function addNodes(targetList, className, dndFlag) {
         boundingRect = element.getBoundingClientRect();
         overlayNode = createOverlay(target, boundingRect, className);
         if (dndFlag) addDragAndDrop(overlayNode);
-        // overlayNode.title = getTitleText(element, target);
+        if (getInfo) overlayNode.title = getInfo(element, target);
         document.body.appendChild(overlayNode);
         counter += 1;
       }
@@ -62,8 +70,8 @@ export function addNodes(targetList, className, dndFlag) {
 *   to remove all instances of the overlay nodes.
 */
 export function removeNodes(className) {
-  var selector = "div." + className;
-  var elements = document.querySelectorAll(selector);
+  let selector = "div." + className;
+  let elements = document.querySelectorAll(selector);
   Array.prototype.forEach.call(elements, function (element) {
     document.body.removeChild(element);
   });

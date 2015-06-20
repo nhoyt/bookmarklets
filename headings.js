@@ -4,6 +4,7 @@
 
 import * as dom from './utils/dom';
 import * as dialog from './utils/dialog';
+import { getElementText } from './utils/accname';
 
 (function () {
   var targetList = [
@@ -20,11 +21,23 @@ import * as dialog from './utils/dialog';
   var msgText   = "No heading elements (" + selectors + ") found.";
   var className = dom.headingsCss;
 
+  function getInfo (element, target) {
+    var textContent = getElementText(element);
+    return target.label + ": " + textContent;
+  }
+
+  let params = {
+    targetList: targetList,
+    className: className,
+    getInfo: getInfo,
+    dndFlag: true
+  };
+
   window.accessibility = function (flag) {
     dialog.hide();
     window.a11yShowHeadings = (typeof flag === "undefined") ? true : !flag;
     if (window.a11yShowHeadings){
-      if (dom.addNodes(targetList, className, true) === 0) {
+      if (dom.addNodes(params) === 0) {
         dialog.show(msgTitle, msgText);
         window.a11yShowHeadings = false;
       }

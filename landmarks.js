@@ -4,6 +4,7 @@
 
 import * as dom from './utils/dom';
 import * as dialog from './utils/dialog';
+import { getAttributeValue, getAccessibleName } from './utils/accname';
 
 (function () {
   var targetList = [
@@ -21,11 +22,30 @@ import * as dialog from './utils/dialog';
   var msgText   = "No elements with ARIA Landmark roles found: <ul>" + selectors + "</ul>";
   var className = dom.landmarksCss;
 
+  function getElementInfo (element) {
+    var tagName = element.tagName.toLowerCase();
+    var role = getAttributeValue(element, 'role');
+    return role.length ? tagName + ' [role="' + role + '"]' : tagName;
+  }
+
+  function getInfo (element, target) {
+    var elementInfo = getElementInfo(element);
+    var accessibleName = getAccessibleName(element, target);
+    return 'ELEMENT: ' + elementInfo + '\n' + 'ACC. NAME: ' + accessibleName;
+  }
+
+  let params = {
+    targetList: targetList,
+    className: className,
+    getInfo: getInfo,
+    dndFlag: true
+  };
+
   window.accessibility = function (flag) {
     dialog.hide();
     window.a11yShowLandmarks = (typeof flag === "undefined") ? true : !flag;
     if (window.a11yShowLandmarks){
-      if (dom.addNodes(targetList, className, true) === 0) {
+      if (dom.addNodes(params) === 0) {
         dialog.show(msgTitle, msgText);
         window.a11yShowLandmarks = false;
       }
