@@ -73,9 +73,19 @@
 	  var className = dom.listsCss;
 
 	  function getInfo(element, target) {
-	    var accessibleName = (0, _utilsAccname.getAccessibleName)(element, target);
+	    var listType = undefined;
+	    switch (target.label) {
+	      case 'dl':
+	        listType = 'Definition list';break;
+	      case 'ol':
+	        listType = 'Ordered list';break;
+	      case 'ul':
+	        listType = 'Unordered list';break;
+	    }
+	    var accessibleName = (0, _utilsAccname.getAccessibleName)(element) || listType;
 	    return 'ACC. NAME: ' + accessibleName;
 	  }
+
 	  var params = {
 	    targetList: targetList,
 	    className: className,
@@ -588,7 +598,12 @@
 	  return '';
 	}
 
-	function getAccessibleName(element, target) {
+	/*
+	*   getAccessibleName: Use ARIA accessible name calculation algorithm
+	*   to retrieve accessible name from sources in order of precedence
+	*/
+
+	function getAccessibleName(element) {
 	  var name;
 
 	  name = getAccessibleNameAria(element);
@@ -597,7 +612,7 @@
 	  name = getAttributeValue(element, 'title');
 	  if (name.length) return name;
 
-	  return target.label;
+	  return '';
 	}
 
 	/*

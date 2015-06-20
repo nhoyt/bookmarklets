@@ -78,7 +78,11 @@ export function getAccessibleNameAria (element) {
   return '';
 }
 
-export function getAccessibleName (element, target) {
+/*
+*   getAccessibleName: Use ARIA accessible name calculation algorithm
+*   to retrieve accessible name from sources in order of precedence
+*/
+export function getAccessibleName (element) {
   var name;
 
   name = getAccessibleNameAria(element);
@@ -87,7 +91,7 @@ export function getAccessibleName (element, target) {
   name = getAttributeValue(element, "title");
   if (name.length) return name;
 
-  return target.label;
+  return '';
 }
 
 /*

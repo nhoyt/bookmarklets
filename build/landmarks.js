@@ -80,7 +80,7 @@
 
 	  function getInfo(element, target) {
 	    var elementInfo = getElementInfo(element);
-	    var accessibleName = (0, _utilsAccname.getAccessibleName)(element, target);
+	    var accessibleName = (0, _utilsAccname.getAccessibleName)(element) || target.label;
 	    return 'ELEMENT: ' + elementInfo + '\n' + 'ACC. NAME: ' + accessibleName;
 	  }
 
@@ -596,7 +596,12 @@
 	  return '';
 	}
 
-	function getAccessibleName(element, target) {
+	/*
+	*   getAccessibleName: Use ARIA accessible name calculation algorithm
+	*   to retrieve accessible name from sources in order of precedence
+	*/
+
+	function getAccessibleName(element) {
 	  var name;
 
 	  name = getAccessibleNameAria(element);
@@ -605,7 +610,7 @@
 	  name = getAttributeValue(element, 'title');
 	  if (name.length) return name;
 
-	  return target.label;
+	  return '';
 	}
 
 	/*

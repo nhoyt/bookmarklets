@@ -23,14 +23,14 @@ import { getAttributeValue, getAccessibleName } from './utils/accname';
   var className = dom.landmarksCss;
 
   function getElementInfo (element) {
-    var tagName = element.tagName.toLowerCase();
-    var role = getAttributeValue(element, 'role');
+    let tagName = element.tagName.toLowerCase();
+    let role = getAttributeValue(element, 'role');
     return role.length ? tagName + ' [role="' + role + '"]' : tagName;
   }
 
   function getInfo (element, target) {
-    var elementInfo = getElementInfo(element);
-    var accessibleName = getAccessibleName(element, target);
+    let elementInfo = getElementInfo(element);
+    let accessibleName = getAccessibleName(element) || target.label;
     return 'ELEMENT: ' + elementInfo + '\n' + 'ACC. NAME: ' + accessibleName;
   }
 

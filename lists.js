@@ -19,9 +19,19 @@ import { getAccessibleName } from './utils/accname';
   var className = dom.listsCss;
 
   function getInfo (element, target) {
-    var accessibleName = getAccessibleName(element, target);
+    let listType;
+    switch (target.label) {
+      case 'dl':
+        listType = 'Definition list'; break;
+      case 'ol':
+        listType = 'Ordered list'; break;
+      case 'ul':
+        listType = 'Unordered list'; break;
+    }
+    let accessibleName = getAccessibleName(element) || listType;
     return 'ACC. NAME: ' + accessibleName;
   }
+
   let params = {
     targetList: targetList,
     className: className,
