@@ -7,8 +7,10 @@
     "type": "git",
     "url": "git+https://github.com/nhoyt/bookmarklets.git"
   },
-  "author": "Landi Lark",
-  "contributors": ["Nicholas Hoyt"],
+  "contributors": [
+    "Landi Lark",
+    "Nicholas Hoyt"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nhoyt/bookmarklets/issues"
