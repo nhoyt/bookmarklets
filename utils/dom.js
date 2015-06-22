@@ -40,7 +40,7 @@ function isVisible(element) {
 export function addNodes(params) {
   let {
     targetList: targetList,
-    className: className,
+    cssClass: cssClass,
     getInfo: getInfo,
     dndFlag: dndFlag } = params;
 
@@ -53,7 +53,7 @@ export function addNodes(params) {
       var boundingRect, overlayNode;
       if (isVisible(element)) {
         boundingRect = element.getBoundingClientRect();
-        overlayNode = createOverlay(target, boundingRect, className);
+        overlayNode = createOverlay(target, boundingRect, cssClass);
         if (dndFlag) addDragAndDrop(overlayNode);
         if (getInfo) overlayNode.title = getInfo(element, target);
         document.body.appendChild(overlayNode);
