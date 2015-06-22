@@ -10,10 +10,13 @@ webpack scaffolding. The motivations and intentions are outlined below.
   * classes
   * arrow functions
   * destructuring
-  
+
 * [webpack](http://webpack.github.io/) is a module bundler that can produce
   minified output files and embedded CSS.
-  
+
 The hope is that by breaking the code down into smaller modules that more
 clearly group related functions, the codebase will be easier to maintain
 and modify with new features.
+
+Note: The forms.js bookmarklet has not yet been ported as it will undergo
+numerous changes in its functionality.
