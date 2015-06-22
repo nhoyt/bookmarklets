@@ -3,9 +3,10 @@ var webpack = require("webpack");
 
 module.exports = {
   entry: {
-    headings: "./headings.js",
+    forms:     "./forms.js",
+    headings:  "./headings.js",
     landmarks: "./landmarks.js",
-    lists: "./lists.js"
+    lists:     "./lists.js"
   },
   output: {
     path: path.join(__dirname, "build"),
