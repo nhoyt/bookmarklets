@@ -26,13 +26,13 @@ import {
   let selectors = targetList.map(function (tgt) {return '<li>' + tgt.selector + '</li>';}).join('');
 
   function getAccessibleNameUseAttributes (element, attributes) {
-    var name, attr;
+    let name;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
 
     if (typeof attributes !== 'undefined') {
-      for (attr of attributes) {
+      for (let attr of attributes) {
         name = getAttributeValue(element, attr);
         if (name.length) return name;
       }
@@ -45,7 +45,7 @@ import {
   }
 
   function getAccessibleNameUseLabel (element, attributes) {
-    var name, label, attr;
+    let name, label;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -70,7 +70,7 @@ import {
 
     // fallback to attributes
     if (typeof attributes !== 'undefined') {
-      for (attr of attributes) {
+      for (let attr of attributes) {
         name = getAttributeValue(element, attr);
         if (name.length) return name;
       }
@@ -84,7 +84,7 @@ import {
 
   // Use for input type submit or reset
   function getAccessibleNameOrDefault (element, defValue) {
-    var name;
+    let name;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -101,7 +101,7 @@ import {
   }
 
   function getAccessibleNameButton (element) {
-    var name;
+    let name;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -116,7 +116,7 @@ import {
   }
 
   function addFieldsetLegend(element, accName) {
-    var fieldset, legend, text, name;
+    let fieldset, legend, text, name;
 
     if (typeof element.closest === 'function') {
       fieldset = element.closest('fieldset');
@@ -140,9 +140,10 @@ import {
   }
 
   function getElementInfoAndAccName (element) {
-    var tagName = element.tagName.toLowerCase();
-    var id = element.id, type = element.type;
-    var elementInfo, accName, forVal;
+    let tagName = element.tagName.toLowerCase(),
+        id      = element.id,
+        type    = element.type,
+        elementInfo, accName, forVal;
 
     switch (tagName) {
       case 'input':
