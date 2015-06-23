@@ -25,15 +25,15 @@ import {
 
   let selectors = targetList.map(function (tgt) {return '<li>' + tgt.selector + '</li>';}).join('');
 
-  function getAccessibleName (element, attributes) {
-    let name, i;
+  function getAccessibleNameUseAttributes (element, attributes) {
+    var name, attr;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
 
     if (typeof attributes !== 'undefined') {
-      for (i = 0; i < attributes.length; i++) {
-        name = getAttributeValue(element, attributes[i]);
+      for (attr of attributes) {
+        name = getAttributeValue(element, attr);
         if (name.length) return name;
       }
     }
@@ -45,7 +45,7 @@ import {
   }
 
   function getAccessibleNameUseLabel (element, attributes) {
-    let name, label, i;
+    var name, label, attr;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -70,8 +70,8 @@ import {
 
     // fallback to attributes
     if (typeof attributes !== 'undefined') {
-      for (i = 0; i < attributes.length; i++) {
-        name = getAttributeValue(element, attributes[i]);
+      for (attr of attributes) {
+        name = getAttributeValue(element, attr);
         if (name.length) return name;
       }
     }
@@ -84,7 +84,7 @@ import {
 
   // Use for input type submit or reset
   function getAccessibleNameOrDefault (element, defValue) {
-    let name;
+    var name;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -101,7 +101,7 @@ import {
   }
 
   function getAccessibleNameButton (element) {
-    let name;
+    var name;
 
     name = getAccessibleNameAria(element);
     if (name.length) return name;
@@ -116,7 +116,7 @@ import {
   }
 
   function addFieldsetLegend(element, accName) {
-    let fieldset, legend, text, name;
+    var fieldset, legend, text, name;
 
     if (typeof element.closest === 'function') {
       fieldset = element.closest('fieldset');
@@ -140,9 +140,9 @@ import {
   }
 
   function getElementInfoAndAccName (element) {
-    let tagName = element.tagName.toLowerCase();
-    let id = element.id, type = element.type;
-    let elementInfo, accName, forVal;
+    var tagName = element.tagName.toLowerCase();
+    var id = element.id, type = element.type;
+    var elementInfo, accName, forVal;
 
     switch (tagName) {
       case 'input':
@@ -158,10 +158,10 @@ import {
             accName = getAccessibleNameUseLabel(element, ['placeholder']);
             break;
           case 'image':
-            accName = getAccessibleName(element, ['alt', 'value']);
+            accName = getAccessibleNameUseAttributes(element, ['alt', 'value']);
             break;
           case 'button':
-            accName = getAccessibleName(element, ['value']);
+            accName = getAccessibleNameUseAttributes(element, ['value']);
             break;
           case 'submit':
             accName = getAccessibleNameOrDefault(element, 'Submit');
