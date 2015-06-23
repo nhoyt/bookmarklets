@@ -38,12 +38,7 @@ function isVisible(element) {
 *   if dndFlag is set, add drag-and-drop functionality.
 */
 export function addNodes(params) {
-  let {
-    targetList: targetList,
-    cssClass: cssClass,
-    getInfo: getInfo,
-    dndFlag: dndFlag } = params;
-
+  let { targetList, cssClass, getInfo, dndFlag } = params;
   let counter = 0;
 
   targetList.forEach(function (target) {
