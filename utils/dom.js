@@ -10,7 +10,7 @@ import { createOverlay, addDragAndDrop } from './overlay';
 *   of its ancestors has properties set that affect its visibility. Called
 *   by addNodes function.
 */
-function isVisible(element) {
+function isVisible (element) {
 
   function isVisibleRec (el) {
     if (el.nodeType === Node.DOCUMENT_NODE) return true;
@@ -37,7 +37,7 @@ function isVisible(element) {
 *   Optionally, if getInfo is specified, add tooltip information;
 *   if dndFlag is set, add drag-and-drop functionality.
 */
-export function addNodes(params) {
+export function addNodes (params) {
   let { targetList, cssClass, getInfo, dndFlag } = params;
   let counter = 0;
 
@@ -64,8 +64,8 @@ export function addNodes(params) {
 *   removeNodes: Use the unique CSS class name supplied to addNodes
 *   to remove all instances of the overlay nodes.
 */
-export function removeNodes(className) {
-  let selector = "div." + className;
+export function removeNodes (cssClass) {
+  let selector = "div." + cssClass;
   let elements = document.querySelectorAll(selector);
   Array.prototype.forEach.call(elements, function (element) {
     document.body.removeChild(element);

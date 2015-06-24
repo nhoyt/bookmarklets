@@ -7,7 +7,7 @@
 *   coordinates that take into account whether the page has been scrolled.
 *   From Mozilla Developer Network: Element.getBoundingClientRect()
 */
-export function getScrollOffsets() {
+export function getScrollOffsets () {
   var t;
 
   var xOffset = (typeof window.pageXOffset === "undefined") ?
@@ -28,7 +28,7 @@ export function getScrollOffsets() {
 *   as its mousedown handler. Depends upon getScrollOffsets function.
 *   From JavaScript: The Definitive Guide, 6th Edition (slightly modified)
 */
-export function drag(elementToDrag, dragCallback, event) {
+export function drag (elementToDrag, dragCallback, event) {
   var scroll = getScrollOffsets();
   var startX = event.clientX + scroll.x;
   var startY = event.clientY + scroll.y;

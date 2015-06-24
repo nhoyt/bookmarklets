@@ -115,7 +115,7 @@ import {
     return '';
   }
 
-  function addFieldsetLegend(element, accName) {
+  function addFieldsetLegend (element, accName) {
     let fieldset, legend, text, name;
 
     if (typeof element.closest === 'function') {

@@ -9,7 +9,7 @@ let zIndex = 100000;
 *   createOverlay: Create overlay div with size and position based on the
 *   boundingRect properties of its corresponding target element.
 */
-export function createOverlay(tgt, rect, cname) {
+export function createOverlay (tgt, rect, cname) {
   var node = document.createElement("div");
   var scrollOffsets = getScrollOffsets();
   var innerStyle = "background-color: " + tgt.color;
@@ -35,7 +35,7 @@ export function createOverlay(tgt, rect, cname) {
 *   addDragAndDrop: Add drag-and-drop and reposition functionality to an
 *   overlay div element created by the createOverlay function.
 */
-export function addDragAndDrop(node) {
+export function addDragAndDrop (node) {
 
   function hoistZIndex (el) {
     let incr = 100;

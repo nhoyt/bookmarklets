@@ -9,7 +9,7 @@ import { getScrollOffsets } from './utils';
 *   the width of the browser window. Called by functions resizeMessage and
 *   createMsgOverlay.
 */
-function setBoxGeometry(dialog) {
+function setBoxGeometry (dialog) {
   let width  = window.innerWidth / 3.2;
   let left   = window.innerWidth / 2 - width / 2;
   let scroll = getScrollOffsets();
@@ -24,7 +24,7 @@ function setBoxGeometry(dialog) {
 *   purpose is to alert the user when no target elements are found by
 *   a bookmarklet.
 */
-function createMsgDialog(handler) {
+function createMsgDialog (handler) {
   let dialog = document.createElement("div");
   let button  = document.createElement("button");
 
@@ -41,14 +41,14 @@ function createMsgDialog(handler) {
 /*
 *   deleteMsgDialog: Use reference to delete message dialog.
 */
-function deleteMsgDialog(dialog) {
+function deleteMsgDialog (dialog) {
   if (dialog) document.body.removeChild(dialog);
 }
 
 /*
 *   show: show message dialog
 */
-export function show(title, message) {
+export function show (title, message) {
   var h2, div;
 
   if (!window.a11yMessageDialog)
@@ -66,7 +66,7 @@ export function show(title, message) {
 /*
 *   hide: hide message dialog
 */
-export function hide() {
+export function hide () {
   if (window.a11yMessageDialog) {
     deleteMsgDialog(window.a11yMessageDialog);
     delete(window.a11yMessageDialog);
@@ -76,7 +76,7 @@ export function hide() {
 /*
 *   resize: resize message dialog
 */
-export function resize() {
+export function resize () {
   if (window.a11yMessageDialog)
     setBoxGeometry(window.a11yMessageDialog);
 }
